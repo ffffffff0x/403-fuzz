@@ -54,38 +54,41 @@ bypass_Fuzz(){
 
     check_null "$1" || exit 1
 
-    Echo_INFOR "正在生成 url character/parameter bypass 字典"
+    rm -f /tmp/bypass_target.txt > /dev/null 2>&1
 
-    bypass_target=$1/$2 && Echo_INFOR "Fuzz_Url : $bypass_target" && echo $bypass_target >> $output/bypass_target.txt
-    bypass_target=$1/../$2 && Echo_INFOR "Fuzz_Url : $bypass_target" && echo $bypass_target >> $output/bypass_target.txt
-    bypass_target=$1../$2 && Echo_INFOR "Fuzz_Url : $bypass_target" && echo $bypass_target >> $output/bypass_target.txt
-    bypass_target=$1/$2..\;/ && Echo_INFOR "Fuzz_Url : $bypass_target" && echo $bypass_target >> $output/bypass_target.txt
-    bypass_target=$1/$2/ && Echo_INFOR "Fuzz_Url : $bypass_target" && echo $bypass_target >> $output/bypass_target.txt
-    bypass_target=$1//$2/ && Echo_INFOR "Fuzz_Url : $bypass_target" && echo $bypass_target >> $output/bypass_target.txt
-    bypass_target=$1/$2\;/ && Echo_INFOR "Fuzz_Url : $bypass_target" && echo $bypass_target >> $output/bypass_target.txt
-    bypass_target=$1/$2/. && Echo_INFOR "Fuzz_Url : $bypass_target" && echo $bypass_target >> $output/bypass_target.txt
-    bypass_target=$1/$2/.. && Echo_INFOR "Fuzz_Url : $bypass_target" && echo $bypass_target >> $output/bypass_target.txt
-    bypass_target=$1//$2// && Echo_INFOR "Fuzz_Url : $bypass_target" && echo $bypass_target >> $output/bypass_target.txt
-    bypass_target=$1/./$2/./ && Echo_INFOR "Fuzz_Url : $bypass_target" && echo $bypass_target >> $output/bypass_target.txt
-    bypass_target=$1/./$2/.. && Echo_INFOR "Fuzz_Url : $bypass_target" && echo $bypass_target >> $output/bypass_target.txt
-    bypass_target=$1/$2%20 && Echo_INFOR "Fuzz_Url : $bypass_target" && echo $bypass_target >> $output/bypass_target.txt
-    bypass_target=$1/%2f/$2 && Echo_INFOR "Fuzz_Url : $bypass_target" && echo $bypass_target >> $output/bypass_target.txt
-    bypass_target=$1/%2e/$2 && Echo_INFOR "Fuzz_Url : $bypass_target" && echo $bypass_target >> $output/bypass_target.txt
-    bypass_target=$1/%252e/$2 && Echo_INFOR "Fuzz_Url : $bypass_target" && echo $bypass_target >> $output/bypass_target.txt
-    bypass_target=$1%ef%bc%8f$2 && Echo_INFOR "Fuzz_Url : $bypass_target" && echo $bypass_target >> $output/bypass_target.txt
-    bypass_target=$1/$2%09 && Echo_INFOR "Fuzz_Url : $bypass_target" && echo $bypass_target >> $output/bypass_target.txt
-    bypass_target=$1/$2? && Echo_INFOR "Fuzz_Url : $bypass_target" && echo $bypass_target >> $output/bypass_target.txt
-    bypass_target=$1/$2* && Echo_INFOR "Fuzz_Url : $bypass_target" && echo $bypass_target >> $output/bypass_target.txt
-    bypass_target=$1/$2.html && Echo_INFOR "Fuzz_Url : $bypass_target" && echo $bypass_target >> $output/bypass_target.txt
-    bypass_target=$1/$2.json && Echo_INFOR "Fuzz_Url : $bypass_target" && echo $bypass_target >> $output/bypass_target.txt
-    bypass_target=$1/$2/?anything && Echo_INFOR "Fuzz_Url : $bypass_target" && echo $bypass_target >> $output/bypass_target.txt
-    bypass_target=$1/$2# && Echo_INFOR "Fuzz_Url : $bypass_target" && echo $bypass_target >> $output/bypass_target.txt
+    Echo_INFOR "HTTP URL character/parameter Fuzz"
+
+    bypass_target=$1/$2 && echo $bypass_target > /tmp/bypass_target.txt
+    bypass_target=$1/../$2 && echo $bypass_target >> /tmp/bypass_target.txt
+    bypass_target=$1../$2 && echo $bypass_target >> /tmp/bypass_target.txt
+    bypass_target=$1/$2..\;/ && echo $bypass_target >> /tmp/bypass_target.txt
+    bypass_target=$1/$2/ && echo $bypass_target >> /tmp/bypass_target.txt
+    bypass_target=$1//$2/ && echo $bypass_target >> /tmp/bypass_target.txt
+    bypass_target=$1/$2\;/ && echo $bypass_target >> /tmp/bypass_target.txt
+    bypass_target=$1/$2/. && echo $bypass_target >> /tmp/bypass_target.txt
+    bypass_target=$1/$2/.. && echo $bypass_target >> /tmp/bypass_target.txt
+    bypass_target=$1//$2// && echo $bypass_target >> /tmp/bypass_target.txt
+    bypass_target=$1/./$2/./ && echo $bypass_target >> /tmp/bypass_target.txt
+    bypass_target=$1/./$2/.. && echo $bypass_target >> /tmp/bypass_target.txt
+    bypass_target=$1/$2%20 && echo $bypass_target >> /tmp/bypass_target.txt
+    bypass_target=$1/%2f/$2 && echo $bypass_target >> /tmp/bypass_target.txt
+    bypass_target=$1/%2e/$2 && echo $bypass_target >> /tmp/bypass_target.txt
+    bypass_target=$1/%252e/$2 && echo $bypass_target >> /tmp/bypass_target.txt
+    bypass_target=$1%ef%bc%8f$2 && echo $bypass_target >> /tmp/bypass_target.txt
+    bypass_target=$1/$2%09 && echo $bypass_target >> /tmp/bypass_target.txt
+    bypass_target=$1/$2? && echo $bypass_target >> /tmp/bypass_target.txt
+    bypass_target=$1/$2* && echo $bypass_target >> /tmp/bypass_target.txt
+    bypass_target=$1/$2.html && echo $bypass_target >> /tmp/bypass_target.txt
+    bypass_target=$1/$2.json && echo $bypass_target >> /tmp/bypass_target.txt
+    bypass_target=$1/$2/?anything && echo $bypass_target >> /tmp/bypass_target.txt
+    bypass_target=$1/$2# && echo $bypass_target >> /tmp/bypass_target.txt
     echo -e ""
 
     # https://github.com/projectdiscovery/httpx
-    Echo_INFOR "External module : httpx"
-    httpx -l $output/bypass_target.txt -title -content-length -status-code -silent -threads 50 -random-agent -follow-redirects
+    httpx -l /tmp/bypass_target.txt -title -content-length -status-code -silent -threads 50 -random-agent -follow-redirects
     print_some
+
+    rm -f /tmp/bypass_target.txt > /dev/null 2>&1
 
     Echo_INFOR "Fuzz_Header : X-Original-URL: $2"
     echo "$1/$2" | httpx -title -content-length -status-code -silent -threads 5 -random-agent -H "X-Original-URL: $2" -follow-redirects
@@ -93,7 +96,7 @@ bypass_Fuzz(){
     echo "$1" | httpx -title -content-length -status-code -silent -threads 5 -random-agent -H "X-rewrite-url: $2" -follow-redirects
 
     print_some
-    Echo_INFOR "正在进行 Method based bypass"
+    Echo_INFOR "HTTP Method based bypass"
     Echo_INFOR "Fuzz_Method : HEAD"
     echo "$1/$2" | httpx -title -content-length -status-code -silent -threads 5 -random-agent -follow-redirects -x HEAD
     Echo_INFOR "Fuzz_Method : Put"
@@ -110,7 +113,7 @@ bypass_Fuzz(){
     echo "$1/$2" | httpx -title -content-length -status-code -silent -threads 5 -random-agent -follow-redirects -x Trace
 
     print_some
-    Echo_INFOR "正在生成 HTTP Header based bypass 字典"
+    Echo_INFOR "HTTP Header based bypass Fuzz"
 
     for line in $(cat Fuzz_head.txt)
     do
