@@ -10,6 +10,11 @@
 #     \|__|    \|__|    \|__|    \|__|    \|__|    \|__|    \|__|    \|__|    \|_______/__/ /\ __\
 #                                                                                      |__|/ \|__|
 
+# ===================== 基础变量设置 =====================
+
+Fuzz_head=(X-Forwarded-For X-Forwarded-Host X-Remote-IP X-Remote-Addr X-Originating-IP X-Custom-IP-Authorization True-Client-IP Client-IP X-Client-IP X-Real-IP Referer X-Powered-By X-True-IP X-Forwarded-By Forwarded X-Host Proxy-Client-IP WL-Proxy-Client-IP CF-Connecting-IP)
+xff_403=(127.0.0.1 0.0.0.0 192.168.0.1 10.0.0.1 172.16.0.1)
+
 # ===================== 基础函数 =====================
 
 Echo_INFOR(){
@@ -115,12 +120,12 @@ bypass_Fuzz(){
     print_some
     Echo_INFOR "HTTP Header based bypass Fuzz"
 
-    for line in $(cat Fuzz_head.txt)
+    for x in "${!Fuzz_head[@]}";
     do
-        for line2 in $(cat xff-403.txt)
+        for y in "${!xff_403[@]}";
         do
-            Echo_INFOR "Fuzz_Header : $line: $line2"
-            echo "$1/$2" | httpx -title -content-length -status-code -silent -threads 5 -random-agent -H "$line: $line2" -follow-redirects
+            Echo_INFOR "Fuzz_Header : ${Fuzz_head[$x]}: ${xff_403[$y]}"
+            echo "$1/$2" | httpx -title -content-length -status-code -silent -threads 5 -random-agent -H "${Fuzz_head[$x]}: ${xff_403[$y]}" -follow-redirects
         done
     done
 
